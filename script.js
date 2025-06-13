@@ -22,8 +22,8 @@ submitBtn.addEventListener("click", function (e) {
   }
   // when the shift-type is -> FPTA.
   console.log(shiftType.value);
-  const regularPayRateFPTA = 29.02; // Regular pay rate for FPTA.
-  const regularPayRateVB = 29.97; // Regular pay rate for FPTA.
+  const regularPayRateFPTA = 27.49; // Regular pay rate for FPTA.
+  const regularPayRateVB = 28.39; // Regular pay rate for FPTA.
   if (shiftType.value === "FPTA") {
     const shiftType = "FPTA";
     calculatePay(startTime, endTime, regularPayRateFPTA, shiftType); // call the function to calculate the pay for FPTA.
@@ -37,21 +37,31 @@ submitBtn.addEventListener("click", function (e) {
 
 // Calculate pay for the shifts -> FPTA, VB (Only the variable 'regularPayRate' is different for both the shifts)
 function calculatePay(startTime, endTime, regularPayRate, shiftType) {
-  const startHour = startTime.slice(0, 2); // get only the shift start hours. -> '06'
-  const endHour = endTime.slice(0, 2); // get only the shift start minutes.
-  const startMinutes = startTime.slice(3, 5); // get only the shift start minutes. -> '20'
-  const endMinutes = endTime.slice(3, 5); // get only the shift end minutes. -> '50'
-  const hoursWorked = Number(endHour) - Number(startHour); // get only the hours worked -> '07'
-  const minutesWorked = Number(endMinutes) - Number(startMinutes); // get only minutes worked -> '30'
-
+  const startHour = Number(startTime.slice(0, 2)); // get only the shift start hours. -> '06'
+  const endHour = Number(endTime.slice(0, 2)); // get only the shift start minutes.
+  const startMinutes = Number(startTime.slice(3, 5)); // get only the shift start minutes. -> '20'
+  const endMinutes = Number(endTime.slice(3, 5)); // get only the shift end minutes. -> '50'
+  const hoursWorked = Number(endHour) - Number(startHour) - 1; // get only the hours worked -> '07'
+  const minutesWorked = Math.abs(Number(endMinutes) - Number(startMinutes)); // get only minutes worked -> '30'
+  console.log(hoursWorked);
   const payForHours = hoursWorked * regularPayRate;
   const payForMinutes = 0.5 * regularPayRate;
   const totalPay = payForHours + payForMinutes;
   // if shift times entered are above 8 hours.
-  if (hoursWorked > 7 || hoursWorked < 7) {
+  if (
+    hoursWorked > 7 ||
+    minutesWorked > 30 ||
+    minutesWorked > 30 ||
+    hoursWorked > 8 ||
+    hoursWorked < 7 ||
+    minutesWorked < 30 ||
+    startHour > endHour // if startHour entered is greater than that of the end Hour.
+  ) {
     // If the minutes are above 30 min, there is no check. the user can enter wrong shift times totalling times from 7h:31m to 7h:59m. This 'if' condition only checks if total hours worked are below or above 7 hours.
     alert(
-      "Please enter your shift times⏰ accurately. Ticket agents🕵🏻‍♀️ typically get scheduled for only 7.5 hours"
+      `⏰ Please enter your shift times accurately.\n \n🕵🏻‍♀️ Ticket agents typically get scheduled for 7.5 hours.\n \n⏳ The shift times you entered are: ${startHour}:${startMinutes} ${
+        startHour < 12 ? "AM" : "PM"
+      } - ${endHour}:${endMinutes} ${endHour < 12 ? "AM" : "PM"}.`
     );
     location.reload();
     return;
@@ -118,7 +128,7 @@ function calculatePayIfBefore_8AM(
 ) {
   const specialPayRateFPTA = regularPayRate * 0.15;
   const newPayRate = regularPayRate + specialPayRateFPTA;
-  const totalHoursBefore_8 = 8 - startHour;
+  const totalHoursBefore_8 = 8 - startHour - 1;
   const totalMinutesBefore_8 = 60 - startMinutes;
   console.log(totalHoursBefore_8);
   console.log(newPayRate);
@@ -134,7 +144,7 @@ function calculatePayIfBefore_8AM(
     totalMinutesConvertedToDecimalNumbers * newPayRate;
   const totalPayBefore_8 = payForHoursBefore_8 + payForMinutesBefore_8;
   console.log(totalPayBefore_8);
-  const hoursAfter_8 = endHour - startHour - totalHoursBefore_8;
+  const hoursAfter_8 = endHour - startHour - totalHoursBefore_8 - 1;
   const convertedMinutesAfter_8 = parseFloat((endMinutes / 60).toFixed(2));
   const payForHoursAfter_8 = hoursAfter_8 * regularPayRate;
   const payForMinutesAfter_8 = convertedMinutesAfter_8 * regularPayRate;
@@ -155,6 +165,11 @@ function calculatePayIfBefore_8AM(
       convertedMinutesAfter_8 * regularPayRate
     } \n minutes after 8 is: ${convertedMinutesAfter_8} hours after 8 is ${hoursAfter_8} `
   );
+  console.log(
+    `Total hours worked today are: ${
+      totalHoursBefore_8 + hoursAfter_8
+    } hours, ${totalMinutesBefore_8 + endMinutes} mins.`
+  );
   displayResultBefore_8AM(
     endMinutes,
     payForHoursBefore_8,
@@ -167,7 +182,10 @@ function calculatePayIfBefore_8AM(
     totalCumulativePay,
     regularPayRate,
     extraPay,
-    shiftType
+    shiftType,
+    startHour,
+    startMinutes,
+    endHour
   );
 
   setTimeout(function () {}, 1000);
@@ -194,14 +212,7 @@ function calculatePayIfAfter_5PM(
   const payForHoursBefore_5 = totalHoursBefore_5 * regularPayRate;
   const extraPay =
     specialPayRateFPTA * (totalHoursAfter_5 + endMinutesConverted);
-  console.log(
-    "The hours before 5pm is:" +
-      " " +
-      totalHoursBefore_5 +
-      `\n The hours after 5pm is: ${totalHoursAfter_5} hours and minutes after 5 is: ${endMinutesConverted} \nTotal Hours you worked today is: ${
-        totalHoursAfter_5 + totalHoursBefore_5
-      } hours`
-  );
+
   const minutesBefore_5 = 60 - startMinutes; // calculate minutes at the start of the shift.
   const minutesBefore_5_Converted = minutesBefore_5 / 60;
   const minutesBefore_5_rounded = parseFloat(
@@ -209,6 +220,14 @@ function calculatePayIfAfter_5PM(
   );
   const payForMinutesBefore_5 = minutesBefore_5_rounded * regularPayRate; // This minutes get regular pay.
 
+  console.log(
+    "The hours before 5pm is:" +
+      " " +
+      totalHoursBefore_5 +
+      `\n The hours after 5pm is: ${totalHoursAfter_5} hours and minutes after 5 is: ${endMinutesConverted} \nTotal Hours you worked today is: ${
+        totalHoursAfter_5 + totalHoursBefore_5
+      } hours, ${minutesBefore_5 + endMinutes} mins`
+  );
   const totalCumulativePay = parseFloat(
     (
       payForHoursBefore_5 +
@@ -232,9 +251,25 @@ function calculatePayIfAfter_5PM(
     totalCumulativePay,
     regularPayRate,
     extraPay,
+    shiftType,
+    startHour,
+    startMinutes,
+    endHour
+  );
+  console.log(
+    endMinutes,
+    payForHoursBefore_5,
+    payForMinutesBefore_5,
+    payForHoursAfter_5,
+    payForMinutesAfter_5,
+    totalHoursBefore_5,
+    minutesBefore_5,
+    totalHoursAfter_5,
+    totalCumulativePay,
+    regularPayRate,
+    extraPay,
     shiftType
   );
-
   //   console.log(totalHoursBefore_8);
   //   console.log(newPayRate);
   //   console.log(totalMinutesBefore_8);
@@ -284,8 +319,16 @@ function displayResultBefore_8AM(
   totalPay,
   regularPayRate,
   extraPay,
-  shiftType
+  shiftType,
+  startHour,
+  startMinutes,
+  endHour
 ) {
+  shiftTimingsDiv.insertAdjacentHTML(
+    "afterend",
+    `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`
+  );
+  shiftTimingsDiv.remove();
   document.querySelector(".div__submit").remove();
   //   shiftTimingsDiv.remove();
   //document.querySelector(".text__div").insertAdjacentHTML("afterend", `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`);
@@ -293,31 +336,29 @@ function displayResultBefore_8AM(
   displayHTML.innerHTML = "";
   displayHTML.insertAdjacentHTML(
     "beforeend",
-    `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay}.<button class="another__calc">Do Another Calculation</button></h3`
+    `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay}.</h3>`
   );
   displayHTML.insertAdjacentHTML(
     "beforeend",
     `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?<button class="Yes">YES</button><button class="No">NO</button></h3>`
   );
+  document.querySelector(".result__text").style.textAlign = "center";
+  document.querySelector(".calc__breakdown--qtn").style.textAlign = "center";
   const doAnotherCalcBtn = document.querySelector(".another__calc");
   doAnotherCalcBtn.addEventListener("click", function (e) {
-    inputShiftStart.value = "";
-    inputShiftEnd.value = "";
-    resultDiv.classList.remove("result__div");
-    displayHTML.innerHTML = "";
-    // add submit button div
-    shiftTimingsDiv.insertAdjacentHTML(
-      "afterend",
-      `   <div class="div__submit">
-          <button class="submit">Submit</button>
-        </div>`
-    );
+    location.reload();
   });
   yesBtn = document.querySelector(".Yes");
   noBtn = document.querySelector(".No");
   noBtn.addEventListener("click", function () {
     console.log("No button is clicked");
-    document.querySelector(".calc__breakdown--qtn").remove();
+    displayHTML.innerHTML = "";
+    displayHTML.insertAdjacentHTML(
+      "beforeend",
+      `<h3 class="result__text">💰 Your Total Pay (before taxes) is: $${totalPay}.</h3>`
+    );
+    // document.querySelector(".calc__breakdown--qtn").remove();
+    document.querySelector(".result__text").style.textAlign = "center";
   });
 
   yesBtn.addEventListener("click", function () {
@@ -328,6 +369,7 @@ function displayResultBefore_8AM(
       (payForHoursAfter_8 + payForMinutesAfter_8).toFixed(2)
     );
     console.log("Yes button is clicked");
+    document.querySelector(".result__text").style.textAlign = "";
     document.querySelector(".calc__breakdown--qtn").remove();
     displayHTML.insertAdjacentHTML(
       "beforeend",
@@ -336,31 +378,46 @@ function displayResultBefore_8AM(
              shiftType === "FPTA"
                ? "Foot Passenger Ticket Agent (FPTA) 🚶🏻‍♂️🚶🏻‍♀️"
                : " Vehicle Booth (VB) 🚙 🚚"
-           } </span> </h3>
-  
-          <h3 class="calc__breakdown--qtn" style="color:black">Your payRate for this shift is: <span class="breakdown"> $${String(
+           } </span>between ${String(startHour).padStart(
+        2,
+        0
+      )}:${startMinutes} ${
+        startHour < 12 ? "AM" : "PM"
+      } - ${endHour}:${endMinutes} ${endHour >= 12 ? "PM" : "AM"}. </h3>
+           
+
+
+          <h3 class="calc__breakdown--qtn" style="color:black"> 💵 Your pay rate for this shift is: <span class="breakdown"> $${String(
             regularPayRate
           ).padEnd(5, 0)}.</span></h3>
            
-          <h3 class="calc__breakdown--qtn" style="color:black"> Hours you worked for this shift before 5PM:<span class="breakdown"> ${totalHoursBefore_8}hour(s), ${totalMinutesBefore_8} mins.</span>Hour(s) you worked for this shift after 5PM for 15% additional pay: <span class="breakdown">${hoursAfter_8} hour(s), ${endMinutes} mins.</span> </h3>
+          <h3 class="calc__breakdown--qtn" style="color:black"> Hours you worked for this shift before 8AM:<span class="breakdown"> ${totalHoursBefore_8}hours, ${totalMinutesBefore_8} mins.</span>
+          Hours you worked for this shift after 8AM: <span class="breakdown">${hoursAfter_8} hours, ${endMinutes} mins.</span> </h3>
           
-          <h3 class="calc__breakdown--qtn" style="color:black">Extra pay at the rate of +15% for ${hoursAfter_8} hour(s), ${endMinutes} mins is: <span class="breakdown"> $${extraPay.toFixed(
+          <h3 class="calc__breakdown--qtn" style="color:black">You have worked today for a total of <span class="breakdown"> ${
+            totalHoursBefore_8 + hoursAfter_8 + 1
+          } hours, ${
+        totalMinutesBefore_8 + Number(endMinutes) - 60
+      } mins. </span></h3>
+
+
+          <h3 class="calc__breakdown--qtn" style="color:black">🤑 Extra pay (at the rate of +15% of your regular payrate) for ${totalHoursBefore_8} hours, ${totalMinutesBefore_8} mins is: <span class="breakdown"> $${extraPay.toFixed(
         2
       )}.</span></h3>
   
-          <h3 class="calc__breakdown--qtn" style="color:black"> Pay for ${hoursAfter_8} hour(s), ${endMinutes} mins ater 5PM is: <span class="breakdown"> $${payAfter_5}</span></h3>
+        <h3 class="calc__breakdown--qtn" style="color:black">Pay for ${totalHoursBefore_8}hours, ${totalMinutesBefore_8} mins 'before 8AM' is: <span class="breakdown"> $${payBefore_8}.</span></h3>
+
+          <h3 class="calc__breakdown--qtn" style="color:black"> Pay for ${hoursAfter_8} hours, ${endMinutes} mins 'after 8AM' is: <span class="breakdown"> $${payAfter_8}.</span></h3>
            
-          <h3 class="calc__breakdown--qtn" style="color:black">The pay for ${totalHoursBefore_5}hour(s), ${totalMinutesBefore_8} mins before 5PM at the regular rate of $${String(
-        regularPayRate
-      ).padEnd(5, 0)} is: <span class="breakdown"> $${payBefore_8}.</span></h3>
   
-          <h3 class="calc__breakdown--qtn" style="color:black">You have worked today for a total of <span class="breakdown"> ${
-            totalHoursBefore_8 + hoursAfter_8
-          } hours, ${
-        totalMinutesBefore_8 + Number(endMinutes)
-      } mins. </span></h3>
+  
+       <h3 class="calc__breakdown--qtn" style="color:black">💰 Your total Income for this shift is:  <span class="breakdown">$${String(
+         totalPay
+       ).padEnd(5, 0)}</span> (before taxes) </h3>
+
           
-          <h3 class="calc__breakdown--qtn" style="color:black"> Your total income for this shift comes to $${payBefore_8}   +  $${payAfter_8} = <span class="breakdown">$${totalPay}</span> </h3>
+          
+         
           
           `
     );
@@ -380,8 +437,16 @@ function displayResultAfter_5PM(
   totalPay,
   regularPayRate,
   extraPay,
-  shiftType
+  shiftType,
+  startHour,
+  startMinutes,
+  endHour
 ) {
+  shiftTimingsDiv.insertAdjacentHTML(
+    "afterend",
+    `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`
+  );
+  shiftTimingsDiv.remove();
   document.querySelector(".div__submit").remove();
   //   shiftTimingsDiv.remove();
   //document.querySelector(".text__div").insertAdjacentHTML("afterend", `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`);
@@ -389,7 +454,7 @@ function displayResultAfter_5PM(
   displayHTML.innerHTML = "";
   displayHTML.insertAdjacentHTML(
     "beforeend",
-    `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay}.<button class="another__calc">Do Another Calculation</button></h3`
+    `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay}.</h3`
   );
   displayHTML.insertAdjacentHTML(
     "beforeend",
@@ -397,23 +462,19 @@ function displayResultAfter_5PM(
   );
   const doAnotherCalcBtn = document.querySelector(".another__calc");
   doAnotherCalcBtn.addEventListener("click", function (e) {
-    inputShiftStart.value = "";
-    inputShiftEnd.value = "";
-    resultDiv.classList.remove("result__div");
-    displayHTML.innerHTML = "";
-    // add submit button div
-    shiftTimingsDiv.insertAdjacentHTML(
-      "afterend",
-      `   <div class="div__submit">
-      <button class="submit">Submit</button>
-    </div>`
-    );
+    location.reload();
   });
   yesBtn = document.querySelector(".Yes");
   noBtn = document.querySelector(".No");
   noBtn.addEventListener("click", function () {
     console.log("No button is clicked");
-    document.querySelector(".calc__breakdown--qtn").remove();
+    displayHTML.innerHTML = "";
+    displayHTML.insertAdjacentHTML(
+      "beforeend",
+      `<h3 class="result__text">💰 Your Total Pay (before taxes) is: $${totalPay}.</h3>`
+    );
+    // document.querySelector(".calc__breakdown--qtn").remove();
+    document.querySelector(".result__text").style.textAlign = "center";
   });
   yesBtn.addEventListener("click", function () {
     const payBefore_5 = parseFloat(
@@ -431,34 +492,46 @@ function displayResultAfter_5PM(
         shiftType === "FPTA"
           ? "Foot Passenger Ticket Agent (FPTA) 🚶🏻‍♂️🚶🏻‍♀️"
           : " Vehicle Booth (VB) 🚙 🚚"
-      } </span> </h3>
+      } </span> between ${startHour}:${startMinutes} ${
+        startHour < 12 ? "AM" : "PM"
+      } - ${endHour}:${endMinutes} ${endHour >= 12 ? "PM" : "AM"}.</h3>
 
 
       <h3 class="calc__breakdown--qtn" style="color:black">
-           Your payRate for this shift is: <span class="breakdown"> $${String(
-             regularPayRate
-           ).padEnd(5, 0)}.</span></h3>
+          💵 Your pay rate for this shift is: <span class="breakdown"> $${String(
+            regularPayRate
+          ).padEnd(5, 0)}.</span></h3>
        
            
            <h3 class="calc__breakdown--qtn" style="color:black">
-           Hours you worked for this shift before 5PM: <span class="breakdown"> ${totalHoursBefore_5}hour(s), ${minutesBefore_5} mins. </span>
-           Hour(s) you worked for this shift after 5PM for 15% additional pay: <span class="breakdown">${totalHoursAfter_5} hour(s), ${endMinutes} mins.</span> </h3>
+           Hours you worked for this shift before 5PM: <span class="breakdown"> ${totalHoursBefore_5}hours, ${minutesBefore_5} mins. </span>
+           Hours you worked for this shift after 5PM: <span class="breakdown">${totalHoursAfter_5} hours, ${endMinutes} mins.</span> </h3>
+           <h3 class="calc__breakdown--qtn" style="color:black">You have worked today for a total of <span class="breakdown"> ${
+             totalHoursBefore_5 + totalHoursAfter_5
+           } hours, ${minutesBefore_5 + Number(endMinutes)} mins. </span></h3>
+          
            <h3 class="calc__breakdown--qtn" style="color:black">
-           Extra pay at the rate of +15% for ${totalHoursAfter_5} hour(s), ${endMinutes} mins is: <span class="breakdown"> $${extraPay.toFixed(
+          🤑 Extra pay (at the rate of +15% of your regular payrate) for ${totalHoursAfter_5} hours, ${endMinutes} mins is: <span class="breakdown"> $${extraPay.toFixed(
         2
-      )}.</span>
+      )}.</span> 
            </h3>
-           <h3 class="calc__breakdown--qtn" style="color:black"> Pay for ${totalHoursAfter_5} hour(s), ${endMinutes} mins ater 5PM is: <span class="breakdown"> $${payAfter_5}</span> </h3>
+           <h3 class="calc__breakdown--qtn" style="color:black"> Pay for ${totalHoursAfter_5} hours, ${endMinutes} mins after 5PM is: <span class="breakdown"> $${String(
+        payAfter_5
+      ).padEnd(0, 5)}.</span> </h3>
            
-      <h3 class="calc__breakdown--qtn" style="color:black">The pay for ${totalHoursBefore_5}hour(s), ${minutesBefore_5} mins before 5PM at the regular rate of $${String(
+      <h3 class="calc__breakdown--qtn" style="color:black">The pay for ${totalHoursBefore_5}hours, ${minutesBefore_5} mins before 5PM at the regular rate of $${String(
         regularPayRate
       ).padEnd(5, 0)} is: <span class="breakdown"> $${payBefore_5}.</span> </h3>
-       <h3 class="calc__breakdown--qtn" style="color:black">You have worked today for a total of <span class="breakdown"> ${
-         totalHoursBefore_5 + totalHoursAfter_5
-       } hours, ${minutesBefore_5 + Number(endMinutes)} mins. </span></h3>
+       
       <h3 class="calc__breakdown--qtn" style="color:black">
-           Your total income for this shift comes to $${payBefore_5}   +  $${payAfter_5} = <span class="breakdown">$${totalPay}</span>
-         </h3>`
+          💰 Your total Income for this shift is: <span class="breakdown">$${String(
+            totalPay
+          ).padEnd(5, 0)}</span> (before taxes)
+         </h3>
+      
+      
+     
+      `
     );
   });
 }
@@ -491,18 +564,8 @@ function displayResultIfNotBefore_8AndNotAfter_5(
     `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?<button class="Yes">YES</button><button class="No">NO</button></h3>`
   );
   const doAnotherCalcBtn = document.querySelector(".another__calc");
+  // WHEN DO-ANOTHER-CALCULATION BUTTON IS CLICKED
   doAnotherCalcBtn.addEventListener("click", function (e) {
-    // inputShiftStart.value = "";
-    // inputShiftEnd.value = "";
-    // resultDiv.classList.remove("result__div");
-    // displayHTML.innerHTML = "";
-    // // add submit button div
-    // shiftTimingsDiv.insertAdjacentHTML(
-    //   "afterend",
-    //   `   <div class="div__submit">
-    //   <button class="submit">Submit</button>
-    // </div>`
-    // );
     location.reload();
   });
   yesBtn = document.querySelector(".Yes");
@@ -525,14 +588,29 @@ function displayResultIfNotBefore_8AndNotAfter_5(
 
 
       <h3 class="calc__breakdown--qtn" style="color:black">
-           Your payRate for this shift is: <span class="breakdown"> $${String(
-             regularPayRate
-           ).padEnd(5, 0)}.</span></h3>
+          💵 Your pay rate for this shift is: <span class="breakdown"> $${String(
+            regularPayRate
+          ).padEnd(5, 0)}.</span></h3>
        
        <h3 class="calc__breakdown--qtn" style="color:black">You have worked today for a total of <span class="breakdown"> ${hoursWorked} hours, ${minutesWorked} mins. </span></h3>
       <h3 class="calc__breakdown--qtn" style="color:black">
-           Your total income for this shift comes t0 = <span class="breakdown">$${totalPay}</span>
+          💰 Your total Income for this shift comes to = <span class="breakdown">$${String(
+            totalPay
+          ).padEnd(5, 0)}</span> (before taxes)
          </h3>`
     );
   });
 }
+
+// ANOTHER WAY I IMPLEMENTED Do-Another-Calculation
+// inputShiftStart.value = "";
+// inputShiftEnd.value = "";
+// resultDiv.classList.remove("result__div");
+// displayHTML.innerHTML = "";
+// // add submit button div
+// shiftTimingsDiv.insertAdjacentHTML(
+//   "afterend",
+//   `   <div class="div__submit">
+//   <button class="submit">Submit</button>
+// </div>`
+// );
