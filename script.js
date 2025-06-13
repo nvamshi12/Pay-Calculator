@@ -53,7 +53,7 @@ function calculatePay(startTime, endTime, regularPayRate, shiftType) {
     minutesWorked > 30 ||
     minutesWorked > 30 ||
     hoursWorked > 8 ||
-    hoursWorked < 7 ||
+    hoursWorked < 6 ||
     minutesWorked < 30 ||
     startHour > endHour // if startHour entered is greater than that of the end Hour.
   ) {
@@ -405,9 +405,13 @@ function displayResultBefore_8AM(
         2
       )}.</span></h3>
   
-        <h3 class="calc__breakdown--qtn" style="color:black">Pay for ${totalHoursBefore_8}hours, ${totalMinutesBefore_8} mins 'before 8AM' is: <span class="breakdown"> $${payBefore_8}.</span></h3>
+        <h3 class="calc__breakdown--qtn" style="color:black">Pay for ${totalHoursBefore_8}hours, ${totalMinutesBefore_8} mins 'before 8AM' is: <span class="breakdown"> $${String(
+        payBefore_8
+      ).padEnd(5, 0)}.</span></h3>
 
-          <h3 class="calc__breakdown--qtn" style="color:black"> Pay for ${hoursAfter_8} hours, ${endMinutes} mins 'after 8AM' is: <span class="breakdown"> $${payAfter_8}.</span></h3>
+          <h3 class="calc__breakdown--qtn" style="color:black"> Pay for ${hoursAfter_8} hours, ${endMinutes} mins 'after 8AM' is: <span class="breakdown"> $${String(
+        payAfter_8
+      ).padEnd(5, 0)}.</span></h3>
            
   
   
