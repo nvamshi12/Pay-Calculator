@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculate BC Ferries Pay</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="./script.js"></script>
+  </head>
+
+  <body>
+    <div class="text__div">
+      <!-- Calculate Your Pay For Each Shift -->
+      <h1>
+        Calculate Your Pay For Ticket Agent -
+        <span style="color: rgb(95, 227, 244)"> BC Ferries</span>
+      </h1>
+      <h2>Simply enter your shift start and end times below.</h2>
+    </div>
+    <div class="div__times">
+      <label
+        for="shift-start"
+        style="color: black; font-size: 18px; font-weight: 500">
+        Shift Start:</label
+      >
+
+      <input id="shift-start" type="time" />
+      <label
+        for="shift-end"
+        style="color: black; font-size: 18px; font-weight: 500"
+        >Shift End:</label
+      >
+      <input id="shift-end" type="time" />
+      <!-- <label
+        for="shift-type"
+        style="color: black; font-size: 18px; font-weight: 500"
+        >Shift Type?</label
+      > -->
+      <!-- <input
+        type="text"
+        placeholder='Type 👉  "FPTA" (or) "VB"'
+        class="input__shift-type"
+        id="shift-type" /> -->
+
+      <label
+        for="dropdown"
+        style="color: black; font-size: 18px; font-weight: 500"
+        >Shift Type?</label
+      >
+      <select id="dropdown">
+        <!-- <option class="disabled" value="" disabled selected> select your shift type </option> -->
+        <option value="FPTA">FPTA - Foot Passenger</option>
+        <option value="VB">VB - Vehicle Booth</option>
+      </select>
+    </div>
+    <div class="div__submit">
+      <!-- <input class="input__submit" type="submit"></input> -->
+      <button class="submit">Submit</button>
+    </div>
+    <div class="result__div result"></div>
+  </body>
+</html>
