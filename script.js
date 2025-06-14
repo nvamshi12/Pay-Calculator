@@ -43,12 +43,18 @@ function calculatePay(startTime, endTime, regularPayRate, shiftType) {
   const endHour = Number(endTime.slice(0, 2)); // get only the shift start minutes.
   const startMinutes = Number(startTime.slice(3, 5)); // get only the shift start minutes. -> '20'
   const endMinutes = Number(endTime.slice(3, 5)); // get only the shift end minutes. -> '50'
-  const hoursWorked = Number(endHour) - Number(startHour) - 1; // get only the hours worked -> '07'
+  let hoursWorked = Number(endHour) - Number(startHour) - 1; // get only the hours worked -> '07'
   const minutesWorked = Math.abs(Number(endMinutes) - Number(startMinutes)); // get only minutes worked -> '30'
   console.log(hoursWorked);
+  if (startMinutes < 10) {
+    // if shift is between 8:05AM - 3:35PM the hours are showing just as 6 hours.
+    hoursWorked++; // add one hour to make it 7 hours.
+    console.log("hours increased to:" + " " + hoursWorked);
+  }
   const payForHours = hoursWorked * regularPayRate;
   const payForMinutes = 0.5 * regularPayRate;
   const totalPay = payForHours + payForMinutes;
+
   // if shift times entered are above 8 hours.
   if (
     hoursWorked > 7 ||
@@ -60,7 +66,7 @@ function calculatePay(startTime, endTime, regularPayRate, shiftType) {
     startHour > endHour // if startHour entered is greater than that of the end Hour.
   ) {
     // If the minutes are above 30 min, there is no check. the user can enter wrong shift times totalling times from 7h:31m to 7h:59m. This 'if' condition only checks if total hours worked are below or above 7 hours.
- alert(
+    alert(
       `⏰ Please enter your shift times accurately.\n \n🕵🏻‍♀️ Ticket agents typically get scheduled for 7.5 hours.\n \n⏳ The shift times you entered are: ${String(
         startHour
       ).padStart(2, 0)}:${String(startMinutes).padStart(2, 0)} ${
@@ -579,23 +585,23 @@ function displayResultIfNotBefore_8AndNotAfter_5(
   extraPay = 0,
   shiftType
 ) {
-  document.querySelector(".div__submit").remove();
+  shiftTimingsDiv.insertAdjacentHTML(
+    "afterend",
+    `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`
+  );
   //   shiftTimingsDiv.remove();
   //document.querySelector(".text__div").insertAdjacentHTML("afterend", `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`);
+  document.querySelector(".div__submit").remove();
+  shiftTimingsDiv.remove();
   resultDiv.classList.add("result__div");
   displayHTML.innerHTML = "";
   displayHTML.insertAdjacentHTML(
     "beforeend",
-    `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay}.<button class="another__calc">Do Another Calculation</button></h3`
+    `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay.toFixed(
+      2
+    )}.</h3`
   );
-  document.querySelector("head").insertAdjacentElement(
-    "beforeend",
-    `<style>@media (min-width: 300px) and (max-width: 1100px){
-    button.another__calc{
-        width: 80%;
-    }
-}</style>`
-  );
+
   displayHTML.insertAdjacentHTML(
     "beforeend",
     `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?</h3><div class="yes-no__button"><button class="Yes">YES</button><button class="No">NO</button></div>`
@@ -614,6 +620,14 @@ function displayResultIfNotBefore_8AndNotAfter_5(
     document.querySelector(".calc__breakdown--qtn").remove();
     document.querySelector("button.Yes").remove();
     document.querySelector("button.No").remove();
+    displayHTML.innerHTML = "";
+    displayHTML.insertAdjacentHTML(
+      "beforeend",
+      `<h3 class="result__text">💰 Your Total Pay (before taxes) is: $${totalPay.toFixed(
+        2
+      )}.</h3`
+    );
+    document.querySelector(".result__text").style.textAlign = "center";
   });
   yesBtn.addEventListener("click", function () {
     console.log("Yes button is clicked");
@@ -621,6 +635,7 @@ function displayResultIfNotBefore_8AndNotAfter_5(
     document.querySelector(".calc__breakdown--qtn").remove();
     document.querySelector("button.Yes").remove();
     document.querySelector("button.No").remove();
+
     displayHTML.insertAdjacentHTML(
       "beforeend",
       `
@@ -628,19 +643,27 @@ function displayResultIfNotBefore_8AndNotAfter_5(
         shiftType === "FPTA"
           ? "Foot Passenger Ticket Agent (FPTA) 🚶🏻‍♂️🚶🏻‍♀️"
           : " Vehicle Booth (VB) 🚙 🚚"
-      } </span> </h3>
+      } </span> between ${String(startHour).padStart(2, 0)}:${String(
+        startMinutes
+      ).padStart(2, 0)} ${
+        startHour < 12 ? "AM" : "PM"
+      } - ${endHour}:${endMinutes} ${endHour >= 12 ? "PM" : "AM"}. </h3>
 
+     
 
       <h3 class="calc__breakdown--qtn" style="color:black">
           💵 Your pay rate for this shift is: <span class="breakdown"> $${String(
             regularPayRate
           ).padEnd(5, 0)}.</span></h3>
+          
+       <h3 class="calc__breakdown--qtn" style="color:black">
+         ⏰ Your shift today starts after 8AM and ends before 5PM, therefore there are no extra earnings for today.</h3>
        
        <h3 class="calc__breakdown--qtn" style="color:black">You have worked today for a total of <span class="breakdown"> ${hoursWorked} hours, ${minutesWorked} mins. </span></h3>
       <h3 class="calc__breakdown--qtn" style="color:black">
-          💰 Your total Income for this shift comes to = <span class="breakdown">$${String(
-            totalPay
-          ).padEnd(5, 0)}</span> (before taxes)
+          💰 Your total Income for this shift is: <span class="breakdown">$${totalPay.toFixed(
+            2
+          )}</span> (before taxes)
          </h3>`
     );
   });
@@ -660,3 +683,9 @@ function displayResultIfNotBefore_8AndNotAfter_5(
 // );
 
 // min: 344
+
+// FEATURES TO ADD
+
+// --> 1. 'Would you like to add your payrate?' button - if user selects yes an input field is provided to enter their payrate.
+
+// --> 2.
