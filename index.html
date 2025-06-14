@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculate BC Ferries Pay</title>
     <link rel="stylesheet" href="./style.css" />
     <script defer src="./script.js"></script>
@@ -17,18 +18,10 @@
       <h2>Simply enter your shift start and end times below.</h2>
     </div>
     <div class="div__times">
-      <label
-        for="shift-start"
-        style="color: black; font-size: 18px; font-weight: 500">
-        Shift Start:</label
-      >
+      <label for="shift-start" style="color: black"> Shift Start ?</label>
 
       <input id="shift-start" type="time" />
-      <label
-        for="shift-end"
-        style="color: black; font-size: 18px; font-weight: 500"
-        >Shift End:</label
-      >
+      <label for="shift-end" style="color: black">Shift End ?</label>
       <input id="shift-end" type="time" />
       <!-- <label
         for="shift-type"
@@ -41,11 +34,7 @@
         class="input__shift-type"
         id="shift-type" /> -->
 
-      <label
-        for="dropdown"
-        style="color: black; font-size: 18px; font-weight: 500"
-        >Shift Type?</label
-      >
+      <label for="dropdown" style="color: black">Shift Type ?</label>
       <select id="dropdown">
         <!-- <option class="disabled" value="" disabled selected> select your shift type </option> -->
         <option value="FPTA">FPTA - Foot Passenger</option>
@@ -56,6 +45,7 @@
       <!-- <input class="input__submit" type="submit"></input> -->
       <button class="submit">Submit</button>
     </div>
+    <div></div>
     <div class="result__div result"></div>
   </body>
 </html>

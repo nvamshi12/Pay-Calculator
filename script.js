@@ -328,6 +328,15 @@ function displayResultBefore_8AM(
     "afterend",
     `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`
   );
+  //   document.querySelector("head").insertAdjacentHTML(
+  //     "afterbegin",
+  //     `<style>@media (min-width: 300px) and (max-width: 1100px){
+  //     button.another__calc{
+  //         width: 70%;
+  //         font-size: 1.5rem;
+  //     }
+  // }</style>`
+  //   );
   shiftTimingsDiv.remove();
   document.querySelector(".div__submit").remove();
   //   shiftTimingsDiv.remove();
@@ -340,8 +349,9 @@ function displayResultBefore_8AM(
   );
   displayHTML.insertAdjacentHTML(
     "beforeend",
-    `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?<button class="Yes">YES</button><button class="No">NO</button></h3>`
+    `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?</h3><div class="yes-no__button"><button class="Yes">YES</button><button class="No">NO</button></div>`
   );
+
   document.querySelector(".result__text").style.textAlign = "center";
   document.querySelector(".calc__breakdown--qtn").style.textAlign = "center";
   const doAnotherCalcBtn = document.querySelector(".another__calc");
@@ -371,6 +381,9 @@ function displayResultBefore_8AM(
     console.log("Yes button is clicked");
     document.querySelector(".result__text").style.textAlign = "";
     document.querySelector(".calc__breakdown--qtn").remove();
+    document.querySelector("button.Yes").remove();
+    document.querySelector("button.No").remove();
+
     displayHTML.insertAdjacentHTML(
       "beforeend",
       `
@@ -462,8 +475,10 @@ function displayResultAfter_5PM(
   );
   displayHTML.insertAdjacentHTML(
     "beforeend",
-    `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?<button class="Yes">YES</button><button class="No">NO</button></h3>`
+    `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?</h3><div class="yes-no__button"><button class="Yes">YES</button><button class="No">NO</button></div>`
   );
+  document.querySelector(".result__text").style.textAlign = "center";
+  document.querySelector(".calc__breakdown--qtn").style.textAlign = "center";
   const doAnotherCalcBtn = document.querySelector(".another__calc");
   doAnotherCalcBtn.addEventListener("click", function (e) {
     location.reload();
@@ -488,7 +503,10 @@ function displayResultAfter_5PM(
       (payForHoursAfter_5 + payForMinutesAfter_5).toFixed(2)
     );
     console.log("Yes button is clicked");
+    document.querySelector(".result__text").style.textAlign = "";
     document.querySelector(".calc__breakdown--qtn").remove();
+    document.querySelector("button.Yes").remove();
+    document.querySelector("button.No").remove();
     displayHTML.insertAdjacentHTML(
       "beforeend",
       `
@@ -563,10 +581,20 @@ function displayResultIfNotBefore_8AndNotAfter_5(
     "beforeend",
     `<h3 class="result__text">Your Total Pay (before taxes) is: $${totalPay}.<button class="another__calc">Do Another Calculation</button></h3`
   );
+  document.querySelector("head").insertAdjacentElement(
+    "beforeend",
+    `<style>@media (min-width: 300px) and (max-width: 1100px){
+    button.another__calc{
+        width: 80%;
+    }
+}</style>`
+  );
   displayHTML.insertAdjacentHTML(
     "beforeend",
-    `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?<button class="Yes">YES</button><button class="No">NO</button></h3>`
+    `<h3 class="calc__breakdown--qtn" style="color:black">Would you like a breakdown of this calculation?</h3><div class="yes-no__button"><button class="Yes">YES</button><button class="No">NO</button></div>`
   );
+  document.querySelector(".result__text").style.textAlign = "center";
+  document.querySelector(".calc__breakdown--qtn").style.textAlign = "center";
   const doAnotherCalcBtn = document.querySelector(".another__calc");
   // WHEN DO-ANOTHER-CALCULATION BUTTON IS CLICKED
   doAnotherCalcBtn.addEventListener("click", function (e) {
@@ -577,10 +605,15 @@ function displayResultIfNotBefore_8AndNotAfter_5(
   noBtn.addEventListener("click", function () {
     console.log("No button is clicked");
     document.querySelector(".calc__breakdown--qtn").remove();
+    document.querySelector("button.Yes").remove();
+    document.querySelector("button.No").remove();
   });
   yesBtn.addEventListener("click", function () {
     console.log("Yes button is clicked");
+    document.querySelector(".result__text").style.textAlign = "";
     document.querySelector(".calc__breakdown--qtn").remove();
+    document.querySelector("button.Yes").remove();
+    document.querySelector("button.No").remove();
     displayHTML.insertAdjacentHTML(
       "beforeend",
       `
@@ -618,3 +651,5 @@ function displayResultIfNotBefore_8AndNotAfter_5(
 //   <button class="submit">Submit</button>
 // </div>`
 // );
+
+// min: 344
