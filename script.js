@@ -1,3 +1,31 @@
+// CHANGE 'Shift-Type?' INPUT FIELD TO APPEAR FIRST ON MOBILE VIEWING.
+const mediaQuery = window.matchMedia("(max-width: 800px)");
+function handleDeviceScreenSizeChanges(e) {
+  if (e.matches) {
+    document.querySelector(".div__times").remove();
+    document.querySelector(".text__div").insertAdjacentHTML(
+      "afterend",
+      `<div class="div__times">
+      <label for="dropdown" style="color: black">Shift Type ?</label>
+      <select id="dropdown">
+        <!-- <option class="disabled" value="" disabled selected> select your shift type </option> -->
+        <option value="FPTA">FPTA - Foot Passenger</option>
+        <option value="VB">VB - Vehicle Booth</option>
+      </select>
+      
+      <label for="shift-start" style="color: black"> Shift Start ?</label>
+
+      <input id="shift-start" type="time" />
+      <label for="shift-end" style="color: black">Shift End ?</label>
+      <input id="shift-end" type="time" />
+    </div>`
+    );
+  }
+}
+handleDeviceScreenSizeChanges(mediaQuery);
+mediaQuery.addEventListener("change", handleDeviceScreenSizeChanges);
+
+// ALL GLOBAL SELECTORS
 const inputShiftStart = document.querySelector("#shift-start");
 const inputShiftEnd = document.querySelector("#shift-end");
 const submitBtn = document.querySelector(".submit");
@@ -9,8 +37,15 @@ resultDiv.classList.remove("result__div");
 let yesBtn;
 let noBtn;
 
+const startTime = inputShiftStart.value; // get the start time values inputted by the user.
+const endTime = inputShiftEnd.value; // get the end time values inputted by the user.
+console.log(startTime);
+console.log(endTime);
+
 // When submit button is clicked.
 submitBtn.addEventListener("click", function (e) {
+  const inputShiftStart = document.querySelector("#shift-start");
+  const inputShiftEnd = document.querySelector("#shift-end");
   e.preventDefault();
   const startTime = inputShiftStart.value; // get the start time values inputted by the user.
   const endTime = inputShiftEnd.value; // get the end time values inputted by the user.
@@ -337,6 +372,7 @@ function displayResultBefore_8AM(
   startMinutes,
   endHour
 ) {
+  const shiftTimingsDiv = document.querySelector(".div__times");
   shiftTimingsDiv.insertAdjacentHTML(
     "afterend",
     `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`
@@ -472,6 +508,8 @@ function displayResultAfter_5PM(
   startMinutes,
   endHour
 ) {
+  const shiftTimingsDiv = document.querySelector(".div__times");
+
   shiftTimingsDiv.insertAdjacentHTML(
     "afterend",
     `<div class="another__calc--div"><button class="another__calc">Do Another Calculation</button></div>`
