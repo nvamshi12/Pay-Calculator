@@ -7,6 +7,9 @@
 body{
     background: linear-gradient(to left, rgb(143, 55, 225), rgb(166, 101, 227));
 }
+.bc-ferries{
+color: rgb(95, 227, 244);
+}
 input{
     border: 1px solid blueviolet;
     border-radius: 18px;
@@ -237,7 +240,9 @@ margin-right: 0.2rem;
 margin-bottom:0; */
 }
 @media (min-width: 300px) and (max-width: 800px){
-
+    .bc-ferries{
+     color: powderblue;
+    }
     h1{
         font-size: 1.5rem;
         padding-left: 1rem;
@@ -279,14 +284,14 @@ margin-bottom:0; */
     #shift-start,#shift-end, #dropdown{
         width: 60%;
         /* height: 2rem; */
-        height: 3.7rem;
+        height: 3rem;
         padding: 15px;
         /* font-size: 0.5rem; */
         font-size: 1rem;
         border-radius: 30px;
     }
     #dropdown{
-        width: 60%;
+        width: 70%;
         height: 3.7rem;
         font-size: 1rem;
     }
@@ -310,6 +315,7 @@ margin-bottom:0; */
     }
     button.Yes, button.No{
         border: 1px solid black;
+        color: black;   
     }
    
     .another__calc--div{
