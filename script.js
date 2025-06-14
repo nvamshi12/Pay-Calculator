@@ -16,6 +16,7 @@ submitBtn.addEventListener("click", function (e) {
   const endTime = inputShiftEnd.value; // get the end time values inputted by the user.
   console.log(startTime);
   console.log(endTime);
+  document.querySelector(".footer").remove();
   if (startTime === "" || endTime === "") {
     alert("⛔️ Please enter your shift times below before clicking submit.");
     return;

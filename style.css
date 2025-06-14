@@ -1,13 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
 body{
     background: linear-gradient(to left, rgb(143, 55, 225), rgb(166, 101, 227));
 }
 input{
     border: 1px solid blueviolet;
     border-radius: 18px;
-    padding: 10px 10px;
     margin: 10px;
     width: 180px;
-    
+    padding: 10px 10px;
 }
 .text__div{
     display: flex;
@@ -18,7 +23,7 @@ input{
 h1{
     font-family:Verdana, Geneva, Tahoma, sans-serif;
   
-    margin-top: 60px;
+    margin-top: 40px;
     /* padding-left: 21%; */
     /* color: rgb(18, 5, 166); */
     color:rgb(211, 253, 2)
@@ -115,7 +120,7 @@ button:active{
     display: flex;
     justify-content: center;
     margin: 100px;
-    margin-top: 80px;
+    margin-top: 60px;
     flex-direction: column;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     background-color: powderblue;
@@ -136,18 +141,27 @@ border: 1.5px solid black;
    
 }
 .result__text{
+    padding: 1.2rem;
+    padding-left: 0;
+    padding-right: 0;
+    /* text-align: center; */
     /* font-family:Verdana, Geneva, Tahoma, sans-serif;
     background-color: powderblue;
     background-color: whitesmoke;
 padding: 15px;
 padding-left: 200px;
-padding-right: 200px;
+padding-right: 200px; 
 color:rgb(140, 1, 140);
 border-radius: 10px;
 border: 2px solid powderblue; */
 
 }
-
+.calc__breakdown--qtn{
+    padding: 1.2rem;
+    padding-left: 0;
+    padding-right: 0;
+    /* text-align: center; */
+}
 
 button.Yes {
     margin: 7px;
@@ -176,6 +190,7 @@ button.No{
     display:flex;
     justify-content: center;
     margin-top: 30px;
+    
 }
 .another__calc{
     margin: 7px;
@@ -203,23 +218,45 @@ span.breakdown{
     justify-content: center;
 }
 
-@media (min-width: 300px) and (max-width: 1100px){
+.footer{
+    display: flex;
+    justify-content: center;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: small;
+    /* text-align: center; */
+    margin-top: 18.3rem;
+}
+
+.footer p{
+    color: rgb(208, 202, 202);
+/* margin: 3rem; */
+/* margin-top: 1.6rem;
+margin-left: 0.2rem;
+margin-right: 0.2rem;
+margin-bottom:0; */
+}
+@media (min-width: 300px) and (max-width: 800px){
 
     h1{
+        font-size: 1.5rem;
         padding-left: 1rem;
         padding-right: 1rem;
         text-align:center;
+
+
     }
     h2{
-        margin-top: 1rem;
+        font-size: 1.2rem;
+        margin-top: 1.6rem;
         margin-bottom: 0;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
         text-align:center;
     }
     
     .div__submit{
-        margin-bottom: 70px;
+        margin-bottom: 80px;
         margin-top :0;
         
     }
@@ -237,21 +274,25 @@ span.breakdown{
     justify-content: center;
     align-items: center;
     margin-bottom: 0;
+    margin-top: 2rem;
     }
     #shift-start,#shift-end, #dropdown{
         width: 60%;
         /* height: 2rem; */
+        height: 3.7rem;
         padding: 15px;
+        /* font-size: 0.5rem; */
         font-size: 1rem;
+        border-radius: 30px;
     }
     #dropdown{
-        width: 70%;
+        width: 60%;
         height: 3.7rem;
         font-size: 1rem;
     }
     label{
         padding-top: 18px;
-        font-size: 1.5rem;
+        font-size: 1rem;
         font-weight: 500;
     }
     .result__div{
@@ -259,7 +300,16 @@ span.breakdown{
         padding: 1rem;
     }
     .result__text{
-        padding: 0;
+        padding-top: 1.2rem;
+        font-size: 0.9rem;
+        padding: 0.9rem
+    }
+    .calc__breakdown--qtn{
+        font-size: 0.9rem;
+        padding: 0.9rem;
+    }
+    button.Yes, button.No{
+        border: 1px solid black;
     }
    
     .another__calc--div{
@@ -272,4 +322,23 @@ span.breakdown{
         font-size: 1rem;
     }
    
+    .footer{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 0.6rem;
+        /* text-align: center; */
+        margin: 0;
+        margin-top: 3rem;
+        margin-left: 0.4rem;
+        margin-right: 0.4rem;
+        margin-bottom: 1.2rem;
+    }
+    .footer p{
+    /* margin: 3rem; */
+        text-align: center;
+    color: rgb(208, 202, 202);
+    }
+
 }
