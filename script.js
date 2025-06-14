@@ -60,10 +60,15 @@ function calculatePay(startTime, endTime, regularPayRate, shiftType) {
     startHour > endHour // if startHour entered is greater than that of the end Hour.
   ) {
     // If the minutes are above 30 min, there is no check. the user can enter wrong shift times totalling times from 7h:31m to 7h:59m. This 'if' condition only checks if total hours worked are below or above 7 hours.
-    alert(
-      `⏰ Please enter your shift times accurately.\n \n🕵🏻‍♀️ Ticket agents typically get scheduled for 7.5 hours.\n \n⏳ The shift times you entered are: ${startHour}:${startMinutes} ${
+ alert(
+      `⏰ Please enter your shift times accurately.\n \n🕵🏻‍♀️ Ticket agents typically get scheduled for 7.5 hours.\n \n⏳ The shift times you entered are: ${String(
+        startHour
+      ).padStart(2, 0)}:${String(startMinutes).padStart(2, 0)} ${
         startHour < 12 ? "AM" : "PM"
-      } - ${endHour}:${endMinutes} ${endHour < 12 ? "AM" : "PM"}.`
+      } - ${String(endHour).padStart(2, 0)}:${String(endMinutes).padStart(
+        2,
+        0
+      )} ${endHour < 12 ? "AM" : "PM"}.`
     );
     location.reload();
     return;
