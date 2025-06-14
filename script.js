@@ -19,6 +19,7 @@ submitBtn.addEventListener("click", function (e) {
   document.querySelector(".footer").remove();
   if (startTime === "" || endTime === "") {
     alert("⛔️ Please enter your shift times below before clicking submit.");
+    location.reload();
     return;
   }
   // when the shift-type is -> FPTA.
